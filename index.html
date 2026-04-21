@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uji Jewelry Store</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="logo">Uji Jewelry</div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Cari produk..." />
+      </div>
+
+      <ul class="nav-links">
+        ><a href="#beranda">Beranda</a></li>
+        ><a href="#kategori">Kategori</a></li>
+        ><a href="#produk">Produk</a></li>
+        >
+          <a href="#" id="cart-icon" onclick="checkoutAlert(event)">
+            🛒 Keranjang (<span id="cart-count">0</span>)
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="beranda">
+      <div class="hero-content">
+        <h1>Temukan Perhiasan Favoritmu</h1>
+        <p>Kalung, cincin, gelang, dan aksesoris elegan untuk gaya sehari-hari.</p>
+        <a href="#produk" class="btn-hero">Belanja Sekarang</a>
+      </div>
+    </section>
+
+    <section class="categories" id="kategori">
+      <h2 class="section-title">Kategori</h2>
+      <div class="category-grid">
+        <div class="category-card">Kalung</div>
+        <div class="category-card">Cincin</div>
+        <div class="category-card">Gelang</div>
+        <div class="category-card">Anting</div>
+      </div>
+    </section>
+
+    <section class="container" id="produk">
+      <h2 class="section-title">Produk Unggulan</h2>
+
+      <div class="product-grid">
+        <article class="product-card">
+          <img src="img/simpel pink.jpg" alt="Simpel Pink">
+          <div class="product-info">
+            <h3>Simpel Pink</h3>
+            <p class="price">Rp 2.999.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="img/gold.jpg" alt="Classic Gold">
+          <div class="product-info">
+            <h3>Classic Gold</h3>
+            <p class="price">Rp 3.499.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="img/vintage.jpg" alt="Vintage">
+          <div class="product-info">
+            <h3>Vintage</h3>
+            <p class="price">Rp 1.099.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="img/Y2K.jpg" alt="Y2K shiny">
+          <div class="product-info">
+            <h3>Y2K shiny</h3>
+            <p class="price">Rp 999.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-info">
+      <p>Kontak: <a href="mailto:ujiish31@gmail.com">ujiish31@gmail.com</a> | +62 838 2294 7317</p>
+      <p>&copy; 2026 Uji Jewelry | Puji - Administrasi Bisnis 3</p>
+    </div>
+  </footer>
+
+  <script>
+    let jumlahBarang = 0;
+
+    function tambahKeKeranjang(namaProduk) {
+      jumlahBarang++;
+      document.getElementById('cart-count').innerText = jumlahBarang;
+      alert(namaProduk + " telah ditambahkan ke keranjang!");
+    }
+
+    function checkoutAlert(event) {
+      event.preventDefault();
+      if (jumlahBarang > 0) {
+        alert("Anda memiliki " + jumlahBarang + " produk di keranjang.");
+      } else {
+        alert("Keranjang Anda masih kosong!");
+      }
+    }
+  </script>
+
+</body>
+</html>
