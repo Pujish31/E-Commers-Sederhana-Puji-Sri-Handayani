@@ -1,29 +1,39 @@
-<script>
-  let jumlahBarang = 0;
-  let keranjang = [];
+document.addEventListener("DOMContentLoaded", function () {
+  const cartCount = document.getElementById("cart-count");
+  const products = document.querySelectorAll(".product-card");
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  function tambahKeKeranjang(namaProduk, event) {
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    cartCount.innerText = cart.length;
+  }
+
+  window.tambahKeKeranjang = function (namaProduk, harga, gambar, kategori, event) {
     if (event) event.preventDefault();
 
-    jumlahBarang++;
-    keranjang.push(namaProduk);
+    const produk = {
+      nama: namaProduk,
+      harga: harga,
+      gambar: gambar,
+      kategori: kategori
+    };
 
-    document.getElementById('cart-count').innerText = jumlahBarang;
+    cart.push(produk);
+    saveCart();
     alert(namaProduk + " telah ditambahkan ke keranjang!");
-  }
+  };
 
-  function checkoutAlert(event) {
+  window.checkoutAlert = function (event) {
     event.preventDefault();
+    window.location.href = "cart.html";
+  };
 
-    if (jumlahBarang > 0) {
-      alert(
-        "Anda memiliki " +
-        jumlahBarang +
-        " produk di keranjang:\n- " +
-        keranjang.join("\n- ")
-      );
-    } else {
-      alert("Keranjang Anda masih kosong!");
-    }
-  }
-</script>
+  window.filterKategori = function (kategori) {
+    products.forEach(function (product) {
+      const cocok = kategori === "all" || product.dataset.category === kategori;
+      product.style.display = cocok ? "block" : "none";
+    });
+  };
+
+  saveCart();
+});
