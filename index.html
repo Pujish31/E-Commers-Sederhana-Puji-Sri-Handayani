@@ -4,8 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Uji Jewelry Store</title>
- <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
+  <style>
+     { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background: #fdf6f0; color: #3a2a2a; }
+
+    .header { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 30px; flex-wrap: wrap; gap: 10px; }
+    .logo { font-size: 22px; font-weight: bold; color: #d17ca0; }
+    .search-box input { padding: 8px 14px; border: 1px solid #e0c9d3; border-radius: 20px; width: 220px; outline: none; }
+    .nav-links { list-style: none; display: flex; gap: 22px; align-items: center; }
+    .nav-links a { text-decoration: none; color: #3a2a2a; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: #d17ca0; }
+    #cart-icon { cursor: pointer; background: #fce8f0; padding: 6px 14px; border-radius: 20px; }
+
+    .hero { background: linear-gradient(135deg, #f6cfe0, #f9e4c8); text-align: center; padding: 80px 20px; }
+    .hero h1 { font-size: 36px; margin-bottom: 10px; color: #7a3b53; }
+    .hero p { font-size: 18px; margin-bottom: 20px; }
+    .btn-hero { background: #d17ca0; color: #fff; padding: 12px 28px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: .2s; }
+    .btn-hero:hover { background: #b45c81; }
+
+    .categories { padding: 40px 20px; text-align: center; }
+    .section-title { font-size: 26px; margin-bottom: 20px; color: #7a3b53; }
+    .category-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .category-card { background: #fff; padding: 20px 30px; border-radius: 12px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.08); cursor: pointer; transition: .2s; }
+    .category-card:hover { transform: translateY(-4px); background: #fce8f0; }
+
+    .container { padding: 40px 30px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .product-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: .2s; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; height: 180px; object-fit: cover; background: #eee; }
+    .product-info { padding: 14px; text-align: center; }
+    .product-info h3 { font-size: 16px; margin-bottom: 6px; }
+    .price { color: #d17ca0; font-weight: bold; margin-bottom: 10px; }
+    .btn-add { background: #7a3b53; color: #fff; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; transition: .2s; width: 100%; }
+    .btn-add:hover { background: #5c2c3f; }
+
+    .footer { background: #7a3b53; color: #fff; text-align: center; padding: 20px; margin-top: 30px; }
+    .footer a { color: #fce8f0; }
+
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 999; }
+    .cart-overlay.active { display: block; }
+    .cart-sidebar { position: fixed; top: 0; right: -400px; width: 360px; max-width: 90vw; height: 100%; background: #fff; box-shadow: -2px 0 12px rgba(0,0,0,0.2); z-index: 1000; transition: right .3s ease; display: flex; flex-direction: column; }
+    .cart-sidebar.active { right: 0; }
+    .cart-header { padding: 18px 20px; background: #d17ca0; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    .cart-header h2 { font-size: 20px; }
+    .close-cart { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 10px 20px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+    .cart-item-name { font-weight: 600; font-size: 14px; }
+    .cart-item-price { color: #d17ca0; font-size: 13px; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .qty-controls button { width: 24px; height: 24px; border: 1px solid #d17ca0; background: #fff; color: #d17ca0; border-radius: 50%; cursor: pointer; font-weight: bold; }
+    .remove-item { color: #c0392b; font-size: 12px; cursor: pointer; background: none; border: none; text-decoration: underline; margin-top: 4px; }
+    .cart-empty { text-align: center; color: #999; margin-top: 40px; }
+    .cart-footer { padding: 16px 20px; border-top: 1px solid #eee; }
+    .cart-total { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin-bottom: 12px; }
+    .btn-checkout { width: 100%; background: #7a3b53; color: #fff; border: none; padding: 12px; border-radius: 25px; font-size: 15px; cursor: pointer; }
+    .btn-checkout:hover { background: #5c2c3f; }
+    .btn-checkout:disabled { background: #ccc; cursor: not-allowed; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1100; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: #fff; border-radius: 14px; width: 420px; max-width: 100%; max-height: 85vh; overflow-y: auto; padding: 26px; }
+    .modal-box h2 { color: #7a3b53; margin-bottom: 16px; }
+    .modal-box label { display: block; font-size: 13px; font-weight: 600; margin-top: 12px; margin-bottom: 4px; }
+    .modal-box input, .modal-box select, .modal-box textarea { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; }
+    .modal-summary { background: #fdf6f0; padding: 12px; border-radius: 10px; margin-top: 16px; font-size: 14px; }
+    .modal-summary div { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-actions button { flex: 1; padding: 10px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; }
+    .btn-cancel { background: #eee; color: #333; }
+    .btn-confirm { background: #d17ca0; color: #fff; }
+    .success-box { text-align: center; padding: 10px 0; }
+    .success-box .checkmark { font-size: 50px; color: #4caf50; }
+  </style>
 </head>
 <body>
 
@@ -14,15 +87,15 @@
       <div class="logo">Uji Jewelry</div>
 
       <div class="search-box">
-        <input type="text" placeholder="Cari produk..." />
+        <input type="text" id="search-input" placeholder="Cari produk..." />
       </div>
 
       <ul class="nav-links">
-        ><a href="#beranda">Beranda</a></li>
-        ><a href="#kategori">Kategori</a></li>
-        ><a href="#produk">Produk</a></li>
-        >
-          <a href="#" id="cart-icon" onclick="checkoutAlert(event)">
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#kategori">Kategori</a></li>
+        <li><a href="#produk">Produk</a></li>
+        <li>
+          <a href="#" id="cart-icon" onclick="bukaKeranjang(event)">
             🛒 Keranjang (<span id="cart-count">0</span>)
           </a>
         </li>
@@ -54,182 +127,182 @@
 
       <div class="product-grid">
         <article class="product-card" data-category="Pink">
-          <img src="simplepink.jpg" alt="Simpel Pink">
+          <img src="simplepink.jpg" alt="Silver Pink">
           <div class="product-info">
             <h3>Silver Pink</h3>
             <p class="price">Rp 2.999.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Silver Pink', 2999000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Pink">
-          <img src="Rosa.jpg" alt="Simpel Pink">
+        <article class="product-card" data-category="Pink">
+          <img src="Rosa.jpg" alt="Rosa">
           <div class="product-info">
             <h3>Rosa</h3>
             <p class="price">Rp 1.499.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Rosa', 1499000)">Tambah ke Keranjang</button>
           </div>
-        </article> 
+        </article>
 
-         <article class="product-card" data-category="Pink">
-          <img src="Crystal Beaded Bracelet Set.jpg" alt="Simpel Pink">
+        <article class="product-card" data-category="Pink">
+          <img src="Crystal Beaded Bracelet Set.jpg" alt="Crystal Beaded Bracelet Set">
           <div class="product-info">
             <h3>Crystal Beaded Bracelet Set</h3>
             <p class="price">Rp 2.899.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Crystal Beaded Bracelet Set', 2899000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Pink">
-          <img src="Pink Bracelet.jpg" alt="Simpel Pink">
+        <article class="product-card" data-category="Pink">
+          <img src="Pink Bracelet.jpg" alt="Pink Bracelet">
           <div class="product-info">
             <h3>Pink Bracelet</h3>
             <p class="price">Rp 1.000.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Pink Bracelet', 1000000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Pink">
-          <img src="Rose gold Cubic.jpg" alt="Simpel Pink">
+        <article class="product-card" data-category="Pink">
+          <img src="Rose gold Cubic.jpg" alt="Rose gold Cubic">
           <div class="product-info">
             <h3>Rose gold Cubic</h3>
             <p class="price">Rp 3.399.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Simpel Pink')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Rose gold Cubic', 3399000)">Tambah ke Keranjang</button>
           </div>
         </article>
-        
+
         <article class="product-card" data-category="Gold">
           <img src="gold.jpg" alt="Classic Gold">
           <div class="product-info">
             <h3>Classic Gold</h3>
             <p class="price">Rp 3.499.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-          <article class="product-card" data-category="Gold">
-          <img src="Luxury Gold.jpg" alt="Classic Gold">
-          <div class="product-info">
-            <h3>Luxury Gold</h3>
-            <p class="price">Rp 2.499.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-         <article class="product-card" data-category="Gold">
-          <img src="Elegant Gold & Pearl.jpg" alt="Classic Gold">
-          <div class="product-info">
-            <h3>Elegant Gold & Pearl</h3>
-            <p class="price">Rp 1.999.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold', 3499000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
         <article class="product-card" data-category="Gold">
-          <img src="Bracelet Gold.jpg" alt="Classic Gold">
+          <img src="Luxury Gold.jpg" alt="Luxury Gold">
+          <div class="product-info">
+            <h3>Luxury Gold</h3>
+            <p class="price">Rp 2.499.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Luxury Gold', 2499000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Gold">
+          <img src="Elegant Gold & Pearl.jpg" alt="Elegant Gold & Pearl">
+          <div class="product-info">
+            <h3>Elegant Gold & Pearl</h3>
+            <p class="price">Rp 1.999.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Elegant Gold &amp; Pearl', 1999000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Gold">
+          <img src="Bracelet Gold.jpg" alt="Bracelet Gold">
           <div class="product-info">
             <h3>Bracelet Gold</h3>
             <p class="price">Rp 2.999.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Bracelet Gold', 2999000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Gold">
-          <img src="set pearl.jpg" alt="Classic Gold">
+        <article class="product-card" data-category="Gold">
+          <img src="set pearl.jpg" alt="Set Pearl">
           <div class="product-info">
             <h3>Set Pearl</h3>
             <p class="price">Rp 3.499.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Classic Gold')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Set Pearl', 3499000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
         <article class="product-card" data-category="Vintage">
-          <img src="vintage.jpg" alt="Vintage">
+          <img src="vintage.jpg" alt="Vintage Retro">
           <div class="product-info">
             <h3>Vintage Retro</h3>
             <p class="price">Rp 1.099.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-         <article class="product-card" data-category="Vintage">
-          <img src="Vintage rings.jpg" alt="Vintage">
-          <div class="product-info">
-            <h3>Vintage Rings</h3>
-            <p class="price">Rp 2.099.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-         <article class="product-card" data-category="Vintage">
-          <img src="charm bracelets.jpg" alt="Vintage">
-          <div class="product-info">
-            <h3>Charm Bracelet</h3>
-            <p class="price">Rp 2.000.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-         <article class="product-card" data-category="Vintage">
-          <img src="Bracelet Watch.jpg" alt="Vintage">
-          <div class="product-info">
-            <h3>Bracelet Watch</h3>
-            <p class="price">Rp 1.599.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
-          </div>
-        </article>
-
-         <article class="product-card" data-category="Vintage">
-          <img src="Watch Bracele.jpg" alt="Vintage">
-          <div class="product-info">
-            <h3>Watch Set</h3>
-            <p class="price">Rp 2.099.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Vintage')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Vintage Retro', 1099000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
         <article class="product-card" data-category="Vintage">
-          <img src="Y2K.jpg" alt="Y2K Shiny">
+          <img src="Vintage rings.jpg" alt="Vintage Rings">
+          <div class="product-info">
+            <h3>Vintage Rings</h3>
+            <p class="price">Rp 2.099.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Vintage Rings', 2099000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Vintage">
+          <img src="charm bracelets.jpg" alt="Charm Bracelet">
+          <div class="product-info">
+            <h3>Charm Bracelet</h3>
+            <p class="price">Rp 2.000.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Charm Bracelet', 2000000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Vintage">
+          <img src="Bracelet Watch.jpg" alt="Bracelet Watch">
+          <div class="product-info">
+            <h3>Bracelet Watch</h3>
+            <p class="price">Rp 1.599.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Bracelet Watch', 1599000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Vintage">
+          <img src="Watch Bracele.jpg" alt="Watch Set">
+          <div class="product-info">
+            <h3>Watch Set</h3>
+            <p class="price">Rp 2.099.000</p>
+            <button class="btn-add" onclick="tambahKeKeranjang('Watch Set', 2099000)">Tambah ke Keranjang</button>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Vintage">
+          <img src="Y2K.jpg" alt="Y2K shiny">
           <div class="product-info">
             <h3>Y2K shiny</h3>
             <p class="price">Rp 999.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny', 999000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Y2K"> 
-          <img src="Pink Butterfly.jpg" alt="Y2K Shiny">
+        <article class="product-card" data-category="Y2K">
+          <img src="Pink Butterfly.jpg" alt="Pink Butterfly">
           <div class="product-info">
             <h3>Pink Butterfly</h3>
             <p class="price">Rp 2.999.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Pink Butterfly', 2999000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Y2K">
-          <img src="Punk Gothic.jpg" alt="Y2K Shiny">
+        <article class="product-card" data-category="Y2K">
+          <img src="Punk Gothic.jpg" alt="Punk Gothic">
           <div class="product-info">
             <h3>Punk Gothic</h3>
             <p class="price">Rp 1.059.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Punk Gothic', 1059000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Y2K">
-          <img src="Y2K Style Colorful Pentagram.jpg" alt="Y2K Shiny">
+        <article class="product-card" data-category="Y2K">
+          <img src="Y2K Style Colorful Pentagram.jpg" alt="Y2K Colorful">
           <div class="product-info">
             <h3>Y2K Colorful</h3>
             <p class="price">Rp 3.099.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Y2K Colorful', 3099000)">Tambah ke Keranjang</button>
           </div>
         </article>
 
-         <article class="product-card" data-category="Y2K">
-          <img src="Kpop Ring Y2K.jpg" alt="Y2K Shiny">
+        <article class="product-card" data-category="Y2K">
+          <img src="Kpop Ring Y2K.jpg" alt="Y2K Ring">
           <div class="product-info">
             <h3>Y2K Ring</h3>
             <p class="price">Rp 1.499.000</p>
-            <button class="btn-add" onclick="tambahKeKeranjang('Y2K shiny')">Tambah ke Keranjang</button>
+            <button class="btn-add" onclick="tambahKeKeranjang('Y2K Ring', 1499000)">Tambah ke Keranjang</button>
           </div>
         </article>
       </div>
@@ -243,23 +316,225 @@
     </div>
   </footer>
 
+  <div class="cart-overlay" id="cart-overlay" onclick="tutupKeranjang()"></div>
+  <aside class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h2>Keranjang Belanja</h2>
+      <button class="close-cart" onclick="tutupKeranjang()">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <p class="cart-empty">Keranjang masih kosong.</p>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cart-total-price">Rp 0</span>
+      </div>
+      <button class="btn-checkout" id="btn-checkout" onclick="bukaCheckout()" disabled>Checkout</button>
+    </div>
+  </aside>
+
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-box" id="checkout-modal-box">
+      <h2>Checkout</h2>
+      <form id="checkout-form" onsubmit="prosesCheckout(event)">
+        <label for="nama">Nama Penerima</label>
+        <input type="text" id="nama" required placeholder="Nama lengkap">
+
+        <label for="alamat">Alamat Pengiriman</label>
+        <textarea id="alamat" rows="2" required placeholder="Alamat lengkap"></textarea>
+
+        <label for="telepon">Nomor Telepon</label>
+        <input type="tel" id="telepon" required placeholder="08xxxxxxxxxx">
+
+        <label for="pembayaran">Metode Pembayaran</label>
+        <select id="pembayaran">
+          <option value="Transfer Bank">Transfer Bank</option>
+          <option value="COD">COD (Bayar di Tempat)</option>
+          <option value="E-Wallet">E-Wallet</option>
+        </select>
+
+        <div class="modal-summary" id="checkout-summary"></div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="tutupCheckout()">Batal</button>
+          <button type="submit" class="btn-confirm">Konfirmasi Pesanan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
-    let jumlahBarang = 0;
+  
+    let keranjang = []; // { nama, harga, qty }
 
-    function tambahKeKeranjang(namaProduk) {
-      jumlahBarang++;
-      document.getElementById('cart-count').innerText = jumlahBarang;
-      alert(namaProduk + " telah ditambahkan ke keranjang!");
+    function formatRupiah(angka) {
+      return "Rp " + angka.toLocaleString("id-ID");
     }
 
-    function checkoutAlert(event) {
-      event.preventDefault();
-      if (jumlahBarang > 0) {
-        alert("Anda memiliki " + jumlahBarang + " produk di keranjang.");
+    function tambahKeKeranjang(nama, harga) {
+      const itemAda = keranjang.find(item => item.nama === nama);
+      if (itemAda) {
+        itemAda.qty++;
       } else {
-        alert("Keranjang Anda masih kosong!");
+        keranjang.push({ nama: nama, harga: harga, qty: 1 });
       }
+      perbaruiTampilanKeranjang();
+      tampilkanNotifikasi(nama + " ditambahkan ke keranjang!");
     }
+
+    function ubahJumlah(index, perubahan) {
+      keranjang[index].qty += perubahan;
+      if (keranjang[index].qty <= 0) {
+        keranjang.splice(index, 1);
+      }
+      perbaruiTampilanKeranjang();
+    }
+
+    function hapusItem(index) {
+      keranjang.splice(index, 1);
+      perbaruiTampilanKeranjang();
+    }
+
+    function hitungTotalItem() {
+      return keranjang.reduce((total, item) => total + item.qty, 0);
+    }
+
+    function hitungTotalHarga() {
+      return keranjang.reduce((total, item) => total + (item.qty * item.harga), 0);
+    }
+
+    function perbaruiTampilanKeranjang() {
+      document.getElementById('cart-count').innerText = hitungTotalItem();
+
+      const container = document.getElementById('cart-items');
+      const btnCheckout = document.getElementById('btn-checkout');
+
+      if (keranjang.length === 0) {
+        container.innerHTML = '<p class="cart-empty">Keranjang masih kosong.</p>';
+        btnCheckout.disabled = true;
+      } else {
+        container.innerHTML = keranjang.map((item, index) => `
+          <div class="cart-item">
+            <div>
+              <div class="cart-item-name">${item.nama}</div>
+              <div class="cart-item-price">${formatRupiah(item.harga)} x ${item.qty}</div>
+              <div class="qty-controls">
+                <button onclick="ubahJumlah(${index}, -1)">-</button>
+                <span>${item.qty}</span>
+                <button onclick="ubahJumlah(${index}, 1)">+</button>
+              </div>
+              <button class="remove-item" onclick="hapusItem(${index})">Hapus</button>
+            </div>
+            <div><strong>${formatRupiah(item.harga * item.qty)}</strong></div>
+          </div>
+        `).join('');
+        btnCheckout.disabled = false;
+      }
+
+      document.getElementById('cart-total-price').innerText = formatRupiah(hitungTotalHarga());
+    }
+
+
+    function bukaKeranjang(event) {
+      if (event) event.preventDefault();
+      document.getElementById('cart-sidebar').classList.add('active');
+      document.getElementById('cart-overlay').classList.add('active');
+    }
+
+    function tutupKeranjang() {
+      document.getElementById('cart-sidebar').classList.remove('active');
+      document.getElementById('cart-overlay').classList.remove('active');
+    }
+
+    function bukaCheckout() {
+      if (keranjang.length === 0) return;
+
+      let ringkasan = keranjang.map(item =>
+        `<div><span>${item.nama} x${item.qty}</span><span>${formatRupiah(item.harga * item.qty)}</span></div>`
+      ).join('');
+      ringkasan += `<div style="border-top:1px solid #ddd; margin-top:8px; padding-top:8px; font-weight:bold;">
+        <span>Total</span><span>${formatRupiah(hitungTotalHarga())}</span>
+      </div>`;
+
+      document.getElementById('checkout-summary').innerHTML = ringkasan;
+      document.getElementById('checkout-modal').classList.add('active');
+      tutupKeranjang();
+    }
+
+    function tutupCheckout() {
+      document.getElementById('checkout-modal').classList.remove('active');
+    }
+
+    function prosesCheckout(event) {
+      event.preventDefault();
+
+      const nama = document.getElementById('nama').value;
+      const alamat = document.getElementById('alamat').value;
+      const telepon = document.getElementById('telepon').value;
+      const pembayaran = document.getElementById('pembayaran').value;
+      const total = hitungTotalHarga();
+      const noPesanan = "UJ-" + Math.floor(100000 + Math.random() * 900000);
+
+      const modalBox = document.getElementById('checkout-modal-box');
+      modalBox.innerHTML = `
+        <div class="success-box">
+          <div class="checkmark">&#10004;</div>
+          <h2>Pesanan Berhasil!</h2>
+          <p>Terima kasih, <strong>${nama}</strong>.</p>
+          <div class="modal-summary" style="text-align:left;">
+            <div><span>No. Pesanan</span><span>${noPesanan}</span></div>
+            <div><span>Alamat</span><span>${alamat}</span></div>
+            <div><span>Telepon</span><span>${telepon}</span></div>
+            <div><span>Pembayaran</span><span>${pembayaran}</span></div>
+            <div style="border-top:1px solid #ddd; margin-top:8px; padding-top:8px; font-weight:bold;">
+              <span>Total Bayar</span><span>${formatRupiah(total)}</span>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-confirm" style="width:100%" onclick="selesaiBelanja()">Selesai</button>
+          </div>
+        </div>
+      `;
+      keranjang = [];
+      perbaruiTampilanKeranjang();
+    }
+
+    function selesaiBelanja() {
+      tutupCheckout();
+      location.reload();
+    }
+    
+    function tampilkanNotifikasi(pesan) {
+      let notif = document.createElement('div');
+      notif.innerText = pesan;
+      notif.style.position = 'fixed';
+      notif.style.bottom = '20px';
+      notif.style.right = '20px';
+      notif.style.background = '#7a3b53';
+      notif.style.color = '#fff';
+      notif.style.padding = '12px 20px';
+      notif.style.borderRadius = '10px';
+      notif.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+      notif.style.zIndex = '2000';
+      notif.style.fontSize = '14px';
+      notif.style.opacity = '0';
+      notif.style.transition = 'opacity .3s';
+      document.body.appendChild(notif);
+      setTimeout(() => notif.style.opacity = '1', 10);
+      setTimeout(() => {
+        notif.style.opacity = '0';
+        setTimeout(() => notif.remove(), 300);
+      }, 2000);
+    }
+
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      const kata = e.target.value.toLowerCase();
+      document.querySelectorAll('.product-card').forEach(card => {
+        const judul = card.querySelector('h3').innerText.toLowerCase();
+        card.style.display = judul.includes(kata) ? '' : 'none';
+      });
+    });
   </script>
 
 </body>
