@@ -189,9 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartCount();
   renderCartPage(); // hanya berjalan jika elemen cart.html ada di halaman ini
 });
-// ================== TAMBAHAN: FITUR STOK PRODUK ==================
 
-// CSS tambahan untuk status stok habis (disuntik lewat JS, tidak mengubah file CSS asli)
 (function tambahCSSStok() {
   const styleTambahan = document.createElement("style");
   styleTambahan.innerHTML = `
@@ -209,7 +207,6 @@ function saveStokData(data) {
   localStorage.setItem("stokData", JSON.stringify(data));
 }
 
-// Ambil stok awal dari teks "Stok: X" di setiap kartu produk (hanya sekali, kalau belum ada di localStorage)
 function initStokDariHalaman() {
   const stokData = getStokData();
   let adaPerubahan = false;
@@ -231,7 +228,6 @@ function initStokDariHalaman() {
   return stokData;
 }
 
-// Perbarui tampilan angka stok + tombol di halaman (index.html)
 function perbaruiTampilanStok() {
   const stokData = getStokData();
 
@@ -265,7 +261,6 @@ function perbaruiTampilanStok() {
   });
 }
 
-// Simpan referensi fungsi asli sebelum ditimpa (fungsi lama tetap dipakai di dalam)
 const _tambahKeKeranjangAsli = window.tambahKeKeranjang;
 
 window.tambahKeKeranjang = function (namaProduk, harga, gambar, kategori, event) {
@@ -290,7 +285,6 @@ window.tambahKeKeranjang = function (namaProduk, harga, gambar, kategori, event)
   _tambahKeKeranjangAsli(namaProduk, harga, gambar, kategori, event);
 };
 
-// Simpan referensi fungsi checkout asli sebelum ditimpa
 const _prosesCheckoutAsli = prosesCheckout;
 
 prosesCheckout = function (event) {
