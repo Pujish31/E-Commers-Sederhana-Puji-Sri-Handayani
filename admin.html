@@ -8,329 +8,299 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #fdf6f0; color: #3a2a2a; min-height: 100vh; }
 
-    /* LOGIN */
-    .login-wrap { max-width: 380px; margin: 80px auto; background: #fff; padding: 34px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    .login-wrap h1 { color: #7a3b53; text-align: center; margin-bottom: 6px; font-size: 22px; }
-    .login-wrap p.sub { text-align: center; color: #999; font-size: 13px; margin-bottom: 22px; }
-    .login-wrap label { display: block; font-size: 13px; font-weight: 600; margin-top: 14px; margin-bottom: 4px; }
-    .login-wrap input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; }
-    .login-wrap button { width: 100%; margin-top: 20px; background: #7a3b53; color: #fff; border: none; padding: 12px; border-radius: 25px; font-size: 15px; cursor: pointer; }
-    .login-wrap button:hover { background: #5c2c3f; }
-    .login-error { color: #c0392b; font-size: 13px; text-align: center; margin-top: 12px; display: none; }
+    /* ===== LOGIN ===== */
+    .login-wrapper {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #f6cfe0, #f9e4c8); padding: 20px;
+    }
+    .login-box {
+      background: #fff; padding: 40px 30px; border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12); width: 100%; max-width: 360px; text-align: center;
+    }
+    .login-box h1 { color: #7a3b53; font-size: 22px; margin-bottom: 6px; }
+    .login-box p { font-size: 13px; color: #888; margin-bottom: 24px; }
+    .login-box input {
+      width: 100%; padding: 12px 14px; margin-bottom: 14px;
+      border: 1px solid #e0c9d3; border-radius: 10px; outline: none; font-size: 14px;
+    }
+    .login-box input:focus { border-color: #d17ca0; }
+    .btn-login {
+      width: 100%; background: #7a3b53; color: #fff; border: none;
+      padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold;
+      cursor: pointer; transition: .2s;
+    }
+    .btn-login:hover { background: #5c2c3f; }
+    .login-error { color: #c0392b; font-size: 13px; margin-top: 10px; min-height: 18px; }
+    .back-link { display: inline-block; margin-top: 16px; font-size: 13px; color: #b45c81; text-decoration: none; }
 
-    /* ADMIN PANEL */
-    .admin-wrap { display: none; max-width: 1100px; margin: 0 auto; padding: 20px; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-    .admin-header h1 { color: #7a3b53; font-size: 22px; }
-    .btn-logout { background: #eee; color: #333; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; }
-    .btn-primary { background: #7a3b53; color: #fff; border: none; padding: 10px 18px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-    .btn-primary:hover { background: #5c2c3f; }
+    /* ===== ADMIN PANEL ===== */
+    .admin-header {
+      background: #7a3b53; color: #fff; padding: 16px 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .admin-header h1 { font-size: 20px; }
+    .btn-logout {
+      background: #fce8f0; color: #7a3b53; border: none; padding: 8px 16px;
+      border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px;
+    }
+    .admin-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
+    .admin-toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+    }
+    .admin-toolbar input {
+      padding: 8px 14px; border: 1px solid #e0c9d3; border-radius: 20px; width: 220px; outline: none;
+    }
+    .btn-save-all {
+      background: #d17ca0; color: #fff; border: none; padding: 10px 20px;
+      border-radius: 20px; font-weight: bold; cursor: pointer;
+    }
+    .btn-save-all:hover { background: #b45c81; }
 
-    .admin-table-wrap { background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 700px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #f0e4e8; font-size: 14px; }
-    th { color: #7a3b53; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; }
-    td img { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; background: #eee; }
-    .stok-input { width: 70px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; text-align: center; }
+    table.stok-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stok-table th, .stok-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #f0e4e8; font-size: 14px; }
+    .stok-table th { background: #fce8f0; color: #7a3b53; }
+    .stok-table img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; background: #eee; vertical-align: middle; margin-right: 8px; }
+    .produk-cell { display: flex; align-items: center; }
+    .stok-input {
+      width: 70px; padding: 6px 8px; border: 1px solid #e0c9d3; border-radius: 8px; text-align: center; font-size: 14px;
+    }
     .badge-habis { color: #c0392b; font-weight: bold; font-size: 12px; }
-    .row-actions button { border: none; padding: 6px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; margin-right: 4px; }
-    .btn-edit { background: #fce8f0; color: #7a3b53; }
-    .btn-delete { background: #fbe4e4; color: #c0392b; }
-    .btn-save-stok { background: #e6f4ea; color: #2e7d32; }
-
-    /* MODAL TAMBAH/EDIT PRODUK */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1100; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: #fff; border-radius: 14px; width: 420px; max-width: 100%; max-height: 85vh; overflow-y: auto; padding: 26px; }
-    .modal-box h2 { color: #7a3b53; margin-bottom: 16px; }
-    .modal-box label { display: block; font-size: 13px; font-weight: 600; margin-top: 12px; margin-bottom: 4px; }
-    .modal-box input, .modal-box select { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; }
-    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-    .modal-actions button { flex: 1; padding: 10px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; }
-    .btn-cancel { background: #eee; color: #333; }
+    .badge-ada { color: #2e7d32; font-weight: bold; font-size: 12px; }
+    .btn-save-row {
+      background: #7a3b53; color: #fff; border: none; padding: 6px 12px;
+      border-radius: 8px; font-size: 12px; cursor: pointer;
+    }
+    .btn-save-row:hover { background: #5c2c3f; }
+    .save-toast {
+      position: fixed; bottom: 20px; right: 20px; background: #7a3b53; color: #fff;
+      padding: 12px 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-size: 14px; opacity: 0; transition: opacity .3s; z-index: 2000;
+    }
 
     @media (max-width: 600px) {
-      .admin-wrap { padding: 12px; }
-      .admin-header { flex-direction: column; align-items: stretch; }
+      .stok-table th:nth-child(3), .stok-table td:nth-child(3) { display: none; } /* sembunyikan kolom kategori di HP */
+      .admin-toolbar input { width: 100%; }
+      .stok-table th, .stok-table td { padding: 8px; font-size: 12px; }
+      .stok-table img { width: 30px; height: 30px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ================= LOGIN ================= -->
-  <div class="login-wrap" id="login-wrap">
-    <h1>Login Admin</h1>
-    <p class="sub">Uji Jewelry Store</p>
-    <form id="login-form">
-      <label for="login-user">Email</label>
-      <input type="email" id="login-user" required placeholder="Email akun admin">
-
-      <label for="login-pass">Password</label>
-      <input type="password" id="login-pass" required placeholder="Password">
-
-      <button type="submit">Masuk</button>
-      <p class="login-error" id="login-error">Username atau password salah.</p>
-    </form>
+  <!-- ===== HALAMAN LOGIN ===== -->
+  <div class="login-wrapper" id="login-wrapper">
+    <div class="login-box">
+      <h1>Admin Login</h1>
+      <p>Uji Jewelry Store</p>
+      <input type="text" id="username" placeholder="Username" autocomplete="username" />
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+      <button class="btn-login" onclick="login()">Masuk</button>
+      <div class="login-error" id="login-error"></div>
+      <a href="index.html" class="back-link">&larr; Kembali ke Toko</a>
+    </div>
   </div>
 
-  <!-- ================= PANEL ADMIN ================= -->
-  <div class="admin-wrap" id="admin-wrap">
+  <!-- ===== HALAMAN ADMIN (STOK) ===== -->
+  <div id="admin-panel" style="display:none;">
     <div class="admin-header">
-      <h1>Kelola Produk</h1>
+      <h1>Kelola Stok Produk</h1>
       <div>
-        <button class="btn-primary" onclick="bukaModalTambah()">+ Tambah Produk</button>
-        <button class="btn-logout" onclick="logoutAdmin()">Keluar</button>
+        <a href="index.html" style="color:#fce8f0; margin-right:14px; font-size:13px;">Lihat Toko</a>
+        <button class="btn-logout" onclick="logout()">Keluar</button>
       </div>
     </div>
 
-    <div class="admin-table-wrap">
-      <table>
+    <div class="admin-container">
+      <div class="admin-toolbar">
+        <input type="text" id="admin-search" placeholder="Cari produk..." oninput="renderTabelStok()" />
+        <button class="btn-save-all" onclick="simpanSemuaStok()">Simpan Semua Perubahan</button>
+      </div>
+
+      <table class="stok-table">
         <thead>
           <tr>
-            <th>Gambar</th>
-            <th>Nama</th>
+            <th>Produk</th>
             <th>Kategori</th>
-            <th>Harga</th>
+            <th>Status</th>
             <th>Stok</th>
-            <th>Aksi</th>
+            <th></th>
           </tr>
         </thead>
-        <tbody id="admin-product-list">
-          <!-- diisi otomatis -->
+        <tbody id="tabel-stok-body">
+          <!-- diisi otomatis lewat JS -->
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ================= MODAL TAMBAH/EDIT ================= -->
-  <div class="modal-overlay" id="product-modal">
-    <div class="modal-box">
-      <h2 id="modal-title">Tambah Produk</h2>
-      <form id="product-form" onsubmit="simpanProduk(event)">
-        <input type="hidden" id="p-id">
+  <div class="save-toast" id="save-toast">Perubahan disimpan!</div>
 
-        <label for="p-nama">Nama Produk</label>
-        <input type="text" id="p-nama" required>
-
-        <label for="p-harga">Harga (Rp)</label>
-        <input type="number" id="p-harga" required min="0">
-
-        <label for="p-gambar">Nama File Gambar</label>
-        <input type="text" id="p-gambar" placeholder="contoh: produk.jpg" required>
-
-        <label for="p-kategori">Kategori</label>
-        <select id="p-kategori">
-          <option value="Pink">Pink</option>
-          <option value="Gold">Gold</option>
-          <option value="Vintage">Vintage</option>
-          <option value="Y2K">Y2K</option>
-        </select>
-
-        <label for="p-stok">Stok</label>
-        <input type="number" id="p-stok" required min="0">
-
-        <div class="modal-actions">
-          <button type="button" class="btn-cancel" onclick="tutupModalProduk()">Batal</button>
-          <button type="submit" class="btn-primary">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="products-data.js"></script>
+  <script src="script.js"></script>
   <script>
     // ================== KONFIGURASI LOGIN ==================
-    // Login sekarang memakai akun yang sama dengan akun.html (localStorage "customers").
-    // Hanya akun dengan role "admin" yang bisa masuk ke panel ini.
+    // Ganti username/password di sini sesuai keinginanmu
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "admin123";
 
-    function getCustomers() {
-      return JSON.parse(localStorage.getItem("customers")) || [];
-    }
-    function saveCustomers(list) {
-      localStorage.setItem("customers", JSON.stringify(list));
-    }
-    function getCurrentCustomerEmail() {
-      return localStorage.getItem("currentCustomerEmail");
-    }
-    function getCurrentAdmin() {
-      const email = getCurrentCustomerEmail();
-      if (!email) return null;
-      const customer = getCustomers().find(c => c.email === email);
-      return customer && customer.role === "admin" ? customer : null;
-    }
+    // Daftar master produk (nama, kategori, gambar) — dicocokkan dengan index.html
+    const masterProduk = [
+      { nama: "Silver Pink", kategori: "Pink", gambar: "simplepink.jpg" },
+      { nama: "Rosa", kategori: "Pink", gambar: "Rosa.jpg" },
+      { nama: "Crystal Beaded Bracelet Set", kategori: "Pink", gambar: "Crystal Beaded Bracelet Set.jpg" },
+      { nama: "Pink Bracelet", kategori: "Pink", gambar: "Pink Bracelet.jpg" },
+      { nama: "Rose gold Cubic", kategori: "Pink", gambar: "Rose gold Cubic.jpg" },
+      { nama: "Classic Gold", kategori: "Gold", gambar: "gold.jpg" },
+      { nama: "Luxury Gold", kategori: "Gold", gambar: "Luxury Gold.jpg" },
+      { nama: "Elegant Gold & Pearl", kategori: "Gold", gambar: "Elegant Gold & Pearl.jpg" },
+      { nama: "Bracelet Gold", kategori: "Gold", gambar: "Bracelet Gold.jpg" },
+      { nama: "Set Pearl", kategori: "Gold", gambar: "set pearl.jpg" },
+      { nama: "Vintage Retro", kategori: "Vintage", gambar: "vintage.jpg" },
+      { nama: "Vintage Rings", kategori: "Vintage", gambar: "Vintage rings.jpg" },
+      { nama: "Charm Bracelet", kategori: "Vintage", gambar: "charm bracelets.jpg" },
+      { nama: "Bracelet Watch", kategori: "Vintage", gambar: "Bracelet Watch.jpg" },
+      { nama: "Watch Set", kategori: "Vintage", gambar: "Watch Bracele.jpg" },
+      { nama: "Y2K shiny", kategori: "Y2K", gambar: "Y2K.jpg" },
+      { nama: "Pink Butterfly", kategori: "Y2K", gambar: "Pink Butterfly.jpg" },
+      { nama: "Punk Gothic", kategori: "Y2K", gambar: "Punk Gothic.jpg" },
+      { nama: "Y2K Colorful", kategori: "Y2K", gambar: "Y2K Style Colorful Pentagram.jpg" },
+      { nama: "Y2K Ring", kategori: "Y2K", gambar: "Kpop Ring Y2K.jpg" }
+    ];
 
-    // Seed satu akun admin default kalau belum ada akun admin sama sekali
-    function seedAdminAccount() {
-      const customers = getCustomers();
-      const sudahAdaAdmin = customers.some(c => c.role === "admin");
-      if (!sudahAdaAdmin) {
-        customers.push({
-          nama: "Admin Uji Jewelry",
-          email: "admin@ujijewelry.com",
-          telepon: "-",
-          alamat: "-",
-          password: "admin123",
-          role: "admin"
-        });
-        saveCustomers(customers);
-      }
-    }
-    seedAdminAccount();
+    // Stok default kalau localStorage masih kosong (mengikuti stok di index.html)
+    const stokDefault = {
+      "Silver Pink": 10, "Rosa": 1, "Crystal Beaded Bracelet Set": 0, "Pink Bracelet": 7,
+      "Rose gold Cubic": 3, "Classic Gold": 9, "Luxury Gold": 0, "Elegant Gold & Pearl": 5,
+      "Bracelet Gold": 8, "Set Pearl": 3, "Vintage Retro": 9, "Vintage Rings": 10,
+      "Charm Bracelet": 8, "Bracelet Watch": 5, "Watch Set": 4, "Y2K shiny": 10,
+      "Pink Butterfly": 6, "Punk Gothic": 9, "Y2K Colorful": 9, "Y2K Ring": 8
+    };
 
-    // ================== FUNGSI PRODUK (sama seperti di script.js) ==================
-    function getProducts() {
-      let produk = JSON.parse(localStorage.getItem("products"));
-      if (!produk) {
-        produk = window.defaultProducts || [];
-        localStorage.setItem("products", JSON.stringify(produk));
-      }
-      return produk;
-    }
-
-    function saveProducts(produk) {
-      localStorage.setItem("products", JSON.stringify(produk));
-    }
-
-    function formatRupiah(angka) {
-      return "Rp " + Number(angka).toLocaleString("id-ID");
+    function pastikanStokAda() {
+      const stokData = getStokData();
+      let ada = false;
+      masterProduk.forEach(p => {
+        if (!(p.nama in stokData)) {
+          stokData[p.nama] = stokDefault[p.nama] !== undefined ? stokDefault[p.nama] : 0;
+          ada = true;
+        }
+      });
+      if (ada) saveStokData(stokData);
     }
 
     // ================== LOGIN / LOGOUT ==================
-    document.getElementById("login-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const email = document.getElementById("login-user").value.toLowerCase().trim();
-      const pass = document.getElementById("login-pass").value;
+    function login() {
+      const u = document.getElementById("username").value.trim();
+      const p = document.getElementById("password").value;
+      const errorEl = document.getElementById("login-error");
 
-      const customers = getCustomers();
-      const found = customers.find(c => c.email === email && c.password === pass);
-
-      if (!found) {
-        document.getElementById("login-error").innerText = "Email atau password salah.";
-        document.getElementById("login-error").style.display = "block";
-        return;
+      if (u === ADMIN_USERNAME && p === ADMIN_PASSWORD) {
+        sessionStorage.setItem("isAdminLoggedIn", "true");
+        errorEl.innerText = "";
+        tampilkanPanelAdmin();
+      } else {
+        errorEl.innerText = "Username atau password salah!";
       }
-      if (found.role !== "admin") {
-        document.getElementById("login-error").innerText = "Akun ini bukan akun admin.";
-        document.getElementById("login-error").style.display = "block";
-        return;
-      }
+    }
 
-      localStorage.setItem("currentCustomerEmail", email);
-      tampilkanPanelAdmin();
-    });
-
-    function logoutAdmin() {
-      localStorage.removeItem("currentCustomerEmail");
-      document.getElementById("admin-wrap").style.display = "none";
-      document.getElementById("login-wrap").style.display = "block";
-      document.getElementById("login-form").reset();
+    function logout() {
+      sessionStorage.removeItem("isAdminLoggedIn");
+      document.getElementById("admin-panel").style.display = "none";
+      document.getElementById("login-wrapper").style.display = "flex";
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
     }
 
     function tampilkanPanelAdmin() {
-      document.getElementById("login-wrap").style.display = "none";
-      document.getElementById("admin-wrap").style.display = "block";
-      renderTabelProduk();
+      document.getElementById("login-wrapper").style.display = "none";
+      document.getElementById("admin-panel").style.display = "block";
+      pastikanStokAda();
+      renderTabelStok();
     }
 
-    // ================== RENDER TABEL PRODUK ==================
-    function renderTabelProduk() {
-      const produk = getProducts();
-      const tbody = document.getElementById("admin-product-list");
+    // Login pakai Enter
+    document.getElementById("password").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") login();
+    });
 
-      tbody.innerHTML = produk
-        .map(
-          (p, index) => `
-        <tr>
-          <td><img src="${p.gambar}" alt="${p.nama}" onerror="this.style.opacity=0.2"></td>
-          <td>${p.nama}</td>
-          <td>${p.kategori}</td>
-          <td>${formatRupiah(p.harga)}</td>
-          <td>
-            <input type="number" class="stok-input" min="0" value="${p.stok}" id="stok-${index}">
-            ${p.stok <= 0 ? '<div class="badge-habis">Habis</div>' : ""}
-          </td>
-          <td class="row-actions">
-            <button class="btn-save-stok" onclick="updateStok(${index})">Simpan Stok</button>
-            <button class="btn-edit" onclick="bukaModalEdit(${index})">Edit</button>
-            <button class="btn-delete" onclick="hapusProduk(${index})">Hapus</button>
-          </td>
-        </tr>
-      `
-        )
-        .join("");
+    // ================== TABEL STOK ==================
+    function renderTabelStok() {
+      const stokData = getStokData();
+      const kataKunci = (document.getElementById("admin-search")?.value || "").toLowerCase();
+      const tbody = document.getElementById("tabel-stok-body");
+
+      const produkTampil = masterProduk.filter(p => p.nama.toLowerCase().includes(kataKunci));
+
+      tbody.innerHTML = produkTampil.map(p => {
+        const stokSaatIni = stokData[p.nama] !== undefined ? stokData[p.nama] : 0;
+        const statusBadge = stokSaatIni <= 0
+          ? '<span class="badge-habis">Habis</span>'
+          : '<span class="badge-ada">Tersedia</span>';
+
+        return `
+          <tr>
+            <td>
+              <div class="produk-cell">
+                <img src="${p.gambar}" onerror="this.style.display='none'">
+                <span>${p.nama}</span>
+              </div>
+            </td>
+            <td>${p.kategori}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <input type="number" min="0" class="stok-input" id="stok-${cssId(p.nama)}" value="${stokSaatIni}">
+            </td>
+            <td>
+              <button class="btn-save-row" onclick="simpanStokSatuan('${escapeJS(p.nama)}')">Simpan</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
     }
 
-    function updateStok(index) {
-      const produk = getProducts();
-      const stokBaru = parseInt(document.getElementById("stok-" + index).value, 10);
-      if (isNaN(stokBaru) || stokBaru < 0) return;
-      produk[index].stok = stokBaru;
-      saveProducts(produk);
-      renderTabelProduk();
+    // Bantuan: bikin id HTML aman dari nama produk (spasi/simbol jadi aman)
+    function cssId(nama) {
+      return nama.replace(/[^a-zA-Z0-9]/g, "-");
+    }
+    function escapeJS(str) {
+      return str.replace(/'/g, "\\'");
     }
 
-    function hapusProduk(index) {
-      if (!confirm("Yakin hapus produk ini?")) return;
-      const produk = getProducts();
-      produk.splice(index, 1);
-      saveProducts(produk);
-      renderTabelProduk();
+    function simpanStokSatuan(nama) {
+      const input = document.getElementById("stok-" + cssId(nama));
+      const nilaiBaru = Math.max(0, parseInt(input.value, 10) || 0);
+
+      const stokData = getStokData();
+      stokData[nama] = nilaiBaru;
+      saveStokData(stokData);
+
+      tampilkanToast(nama + " diperbarui jadi " + nilaiBaru + " stok.");
+      renderTabelStok();
     }
 
-    // ================== TAMBAH / EDIT PRODUK ==================
-    let editIndex = null;
-
-    function bukaModalTambah() {
-      editIndex = null;
-      document.getElementById("modal-title").innerText = "Tambah Produk";
-      document.getElementById("product-form").reset();
-      document.getElementById("product-modal").classList.add("active");
+    function simpanSemuaStok() {
+      const stokData = getStokData();
+      masterProduk.forEach(p => {
+        const input = document.getElementById("stok-" + cssId(p.nama));
+        if (input) {
+          stokData[p.nama] = Math.max(0, parseInt(input.value, 10) || 0);
+        }
+      });
+      saveStokData(stokData);
+      tampilkanToast("Semua perubahan stok berhasil disimpan!");
+      renderTabelStok();
     }
 
-    function bukaModalEdit(index) {
-      editIndex = index;
-      const produk = getProducts()[index];
-      document.getElementById("modal-title").innerText = "Edit Produk";
-      document.getElementById("p-nama").value = produk.nama;
-      document.getElementById("p-harga").value = produk.harga;
-      document.getElementById("p-gambar").value = produk.gambar;
-      document.getElementById("p-kategori").value = produk.kategori;
-      document.getElementById("p-stok").value = produk.stok;
-      document.getElementById("product-modal").classList.add("active");
-    }
-
-    function tutupModalProduk() {
-      document.getElementById("product-modal").classList.remove("active");
-    }
-
-    function simpanProduk(event) {
-      event.preventDefault();
-      const produk = getProducts();
-
-      const dataBaru = {
-        nama: document.getElementById("p-nama").value,
-        harga: parseInt(document.getElementById("p-harga").value, 10),
-        gambar: document.getElementById("p-gambar").value,
-        kategori: document.getElementById("p-kategori").value,
-        stok: parseInt(document.getElementById("p-stok").value, 10)
-      };
-
-      if (editIndex !== null) {
-        dataBaru.id = produk[editIndex].id; // id tetap sama saat edit
-        produk[editIndex] = dataBaru;
-      } else {
-        dataBaru.id = "produk-" + Date.now(); // id unik otomatis untuk produk baru
-        produk.push(dataBaru);
-      }
-
-      saveProducts(produk);
-      tutupModalProduk();
-      renderTabelProduk();
+    function tampilkanToast(pesan) {
+      const toast = document.getElementById("save-toast");
+      toast.innerText = pesan;
+      toast.style.opacity = "1";
+      setTimeout(() => (toast.style.opacity = "0"), 2000);
     }
 
     // ================== CEK STATUS LOGIN SAAT HALAMAN DIBUKA ==================
     document.addEventListener("DOMContentLoaded", function () {
-      if (getCurrentAdmin()) {
+      if (sessionStorage.getItem("isAdminLoggedIn") === "true") {
         tampilkanPanelAdmin();
       }
     });
