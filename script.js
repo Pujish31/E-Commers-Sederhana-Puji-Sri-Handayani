@@ -189,3 +189,145 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartCount();
   renderCartPage(); // hanya berjalan jika elemen cart.html ada di halaman ini
 });
+// ================== TAMBAHAN: FITUR STOK PRODUK ==================
+
+// CSS tambahan untuk status stok habis (disuntik lewat JS, tidak mengubah file CSS asli)
+(function tambahCSSStok() {
+  const styleTambahan = document.createElement("style");
+  styleTambahan.innerHTML = `
+    .stock-info.habis { color: #c0392b; font-weight: bold; }
+    .btn-add:disabled { background: #ccc; cursor: not-allowed; }
+  `;
+  document.head.appendChild(styleTambahan);
+})();
+
+function getStokData() {
+  return JSON.parse(localStorage.getItem("stokData")) || {};
+}
+
+function saveStokData(data) {
+  localStorage.setItem("stokData", JSON.stringify(data));
+}
+
+// Ambil stok awal dari teks "Stok: X" di setiap kartu produk (hanya sekali, kalau belum ada di localStorage)
+function initStokDariHalaman() {
+  const stokData = getStokData();
+  let adaPerubahan = false;
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    const judulEl = card.querySelector("h3");
+    const stokEl = card.querySelector(".stock-info");
+    if (!judulEl || !stokEl) return;
+
+    const nama = judulEl.innerText.trim();
+    if (!(nama in stokData)) {
+      const angka = parseInt(stokEl.innerText.replace(/[^0-9]/g, ""), 10);
+      stokData[nama] = isNaN(angka) ? 0 : angka;
+      adaPerubahan = true;
+    }
+  });
+
+  if (adaPerubahan) saveStokData(stokData);
+  return stokData;
+}
+
+// Perbarui tampilan angka stok + tombol di halaman (index.html)
+function perbaruiTampilanStok() {
+  const stokData = getStokData();
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    const judulEl = card.querySelector("h3");
+    const stokEl = card.querySelector(".stock-info");
+    const btnEl = card.querySelector(".btn-add");
+    if (!judulEl || !stokEl) return;
+
+    const nama = judulEl.innerText.trim();
+    if (!(nama in stokData)) return;
+
+    const stokSaatIni = stokData[nama];
+    stokEl.innerText = "Stok: " + stokSaatIni;
+
+    if (stokSaatIni <= 0) {
+      stokEl.classList.remove("ada");
+      stokEl.classList.add("habis");
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerText = "Stok Habis";
+      }
+    } else {
+      stokEl.classList.add("ada");
+      stokEl.classList.remove("habis");
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerText = "Tambah ke Keranjang";
+      }
+    }
+  });
+}
+
+// Simpan referensi fungsi asli sebelum ditimpa (fungsi lama tetap dipakai di dalam)
+const _tambahKeKeranjangAsli = window.tambahKeKeranjang;
+
+window.tambahKeKeranjang = function (namaProduk, harga, gambar, kategori, event) {
+  if (event) event.preventDefault();
+
+  const stokData = getStokData();
+  const stokTersedia = stokData[namaProduk];
+
+  if (stokTersedia !== undefined && stokTersedia <= 0) {
+    tampilkanNotifikasi("Maaf, stok " + namaProduk + " sudah habis!");
+    return;
+  }
+
+  const itemDiKeranjang = cart.find(item => item.nama === namaProduk);
+  const qtyDiKeranjang = itemDiKeranjang ? itemDiKeranjang.qty : 0;
+
+  if (stokTersedia !== undefined && qtyDiKeranjang + 1 > stokTersedia) {
+    tampilkanNotifikasi("Stok " + namaProduk + " tidak mencukupi!");
+    return;
+  }
+
+  _tambahKeKeranjangAsli(namaProduk, harga, gambar, kategori, event);
+};
+
+// Simpan referensi fungsi checkout asli sebelum ditimpa
+const _prosesCheckoutAsli = prosesCheckout;
+
+prosesCheckout = function (event) {
+  event.preventDefault();
+
+  const stokData = getStokData();
+  let stokCukup = true;
+  let itemKurang = "";
+
+  for (const item of cart) {
+    const stokTersedia = stokData[item.nama];
+    if (stokTersedia !== undefined && item.qty > stokTersedia) {
+      stokCukup = false;
+      itemKurang = item.nama;
+      break;
+    }
+  }
+
+  if (!stokCukup) {
+    alert("Maaf, stok \"" + itemKurang + "\" tidak mencukupi untuk checkout. Silakan sesuaikan jumlah di keranjang.");
+    return;
+  }
+
+  // Kurangi stok sesuai jumlah yang dibeli
+  cart.forEach(item => {
+    if (stokData[item.nama] !== undefined) {
+      stokData[item.nama] -= item.qty;
+      if (stokData[item.nama] < 0) stokData[item.nama] = 0;
+    }
+  });
+  saveStokData(stokData);
+
+  _prosesCheckoutAsli(event);
+};
+
+// Jalankan saat halaman dimuat (index.html maupun cart.html)
+document.addEventListener("DOMContentLoaded", function () {
+  initStokDariHalaman();
+  perbaruiTampilanStok();
+});
