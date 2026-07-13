@@ -190,19 +190,34 @@
 
     // ================== LOGIN / LOGOUT ==================
     function login() {
-      const u = document.getElementById("username").value.trim();
-      const p = document.getElementById("password").value;
-      const errorEl = document.getElementById("login-error");
+  const u = document.getElementById("username").value.trim();
+  const p = document.getElementById("password").value.trim();
+  const errorEl = document.getElementById("login-error");
 
-      if (u === ADMIN_USERNAME && p === ADMIN_PASSWORD) {
-        sessionStorage.setItem("isAdminLoggedIn", "true");
-        errorEl.innerText = "";
-        tampilkanPanelAdmin();
-      } else {
-        errorEl.innerText = "Username atau password salah!";
-      }
-    }
+  if (u === "" || p === "") {
+    errorEl.innerText = "Nama dan sandi wajib diisi!";
+    return;
+  }
 
+  // Login diterima asal nama & sandi terisi (bebas, tidak dicek kecocokan)
+  sessionStorage.setItem("isAdminLoggedIn", "true");
+  sessionStorage.setItem("adminNama", u);
+  errorEl.innerText = "";
+  tampilkanPanelAdmin();
+}
+
+    function tampilkanPanelAdmin() {
+  document.getElementById("login-wrapper").style.display = "none";
+  document.getElementById("admin-panel").style.display = "block";
+
+  const nama = sessionStorage.getItem("adminNama");
+  const headerH1 = document.querySelector(".admin-header h1");
+  if (nama && headerH1) headerH1.innerText = "Kelola Stok Produk — Halo, " + nama;
+
+  pastikanStokAda();
+  renderTabelStok();
+}
+    
     function logout() {
       sessionStorage.removeItem("isAdminLoggedIn");
       document.getElementById("admin-panel").style.display = "none";
