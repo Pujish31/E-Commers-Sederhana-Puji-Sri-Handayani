@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - Uji Jewelry Store</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+     { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #fdf6f0; color: #3a2a2a; min-height: 100vh; }
 
-    /* ===== LOGIN ===== */
     .login-wrapper {
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #f6cfe0, #f9e4c8); padding: 20px;
@@ -33,7 +32,6 @@
     .login-error { color: #c0392b; font-size: 13px; margin-top: 10px; min-height: 18px; }
     .back-link { display: inline-block; margin-top: 16px; font-size: 13px; color: #b45c81; text-decoration: none; }
 
-    /* ===== ADMIN PANEL ===== */
     .admin-header {
       background: #7a3b53; color: #fff; padding: 16px 24px;
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
@@ -88,7 +86,6 @@
 </head>
 <body>
 
-  <!-- ===== HALAMAN LOGIN ===== -->
   <div class="login-wrapper" id="login-wrapper">
     <div class="login-box">
       <h1>Admin Login</h1>
@@ -101,7 +98,6 @@
     </div>
   </div>
 
-  <!-- ===== HALAMAN ADMIN (STOK) ===== -->
   <div id="admin-panel" style="display:none;">
     <div class="admin-header">
       <h1>Kelola Stok Produk</h1>
@@ -138,12 +134,10 @@
 
   <script src="script.js"></script>
   <script>
-    // ================== KONFIGURASI LOGIN ==================
-    // Ganti username/password di sini sesuai keinginanmu
+
     const ADMIN_USERNAME = "admin";
     const ADMIN_PASSWORD = "admin123";
 
-    // Daftar master produk (nama, kategori, gambar) — dicocokkan dengan index.html
     const masterProduk = [
       { nama: "Silver Pink", kategori: "Pink", gambar: "simplepink.jpg" },
       { nama: "Rosa", kategori: "Pink", gambar: "Rosa.jpg" },
@@ -167,7 +161,6 @@
       { nama: "Y2K Ring", kategori: "Y2K", gambar: "Kpop Ring Y2K.jpg" }
     ];
 
-    // Stok default kalau localStorage masih kosong (mengikuti stok di index.html)
     const stokDefault = {
       "Silver Pink": 10, "Rosa": 1, "Crystal Beaded Bracelet Set": 0, "Pink Bracelet": 7,
       "Rose gold Cubic": 3, "Classic Gold": 9, "Luxury Gold": 0, "Elegant Gold & Pearl": 5,
@@ -188,7 +181,6 @@
       if (ada) saveStokData(stokData);
     }
 
-    // ================== LOGIN / LOGOUT ==================
     function login() {
   const u = document.getElementById("username").value.trim();
   const p = document.getElementById("password").value.trim();
@@ -199,7 +191,6 @@
     return;
   }
 
-  // Login diterima asal nama & sandi terisi (bebas, tidak dicek kecocokan)
   sessionStorage.setItem("isAdminLoggedIn", "true");
   sessionStorage.setItem("adminNama", u);
   errorEl.innerText = "";
@@ -238,7 +229,6 @@
       if (e.key === "Enter") login();
     });
 
-    // ================== TABEL STOK ==================
     function renderTabelStok() {
       const stokData = getStokData();
       const kataKunci = (document.getElementById("admin-search")?.value || "").toLowerCase();
@@ -273,7 +263,6 @@
       }).join("");
     }
 
-    // Bantuan: bikin id HTML aman dari nama produk (spasi/simbol jadi aman)
     function cssId(nama) {
       return nama.replace(/[^a-zA-Z0-9]/g, "-");
     }
@@ -313,7 +302,6 @@
       setTimeout(() => (toast.style.opacity = "0"), 2000);
     }
 
-    // ================== CEK STATUS LOGIN SAAT HALAMAN DIBUKA ==================
     document.addEventListener("DOMContentLoaded", function () {
       if (sessionStorage.getItem("isAdminLoggedIn") === "true") {
         tampilkanPanelAdmin();
