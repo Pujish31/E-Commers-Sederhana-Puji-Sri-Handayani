@@ -8,6 +8,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #fdf6f0; color: #3a2a2a; min-height: 100vh; }
 
+    /* LOGIN */
     .login-wrap { max-width: 380px; margin: 80px auto; background: #fff; padding: 34px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
     .login-wrap h1 { color: #7a3b53; text-align: center; margin-bottom: 6px; font-size: 22px; }
     .login-wrap p.sub { text-align: center; color: #999; font-size: 13px; margin-bottom: 22px; }
@@ -17,6 +18,7 @@
     .login-wrap button:hover { background: #5c2c3f; }
     .login-error { color: #c0392b; font-size: 13px; text-align: center; margin-top: 12px; display: none; }
 
+    /* ADMIN PANEL */
     .admin-wrap { display: none; max-width: 1100px; margin: 0 auto; padding: 20px; }
     .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .admin-header h1 { color: #7a3b53; font-size: 22px; }
@@ -36,6 +38,7 @@
     .btn-delete { background: #fbe4e4; color: #c0392b; }
     .btn-save-stok { background: #e6f4ea; color: #2e7d32; }
 
+    /* MODAL TAMBAH/EDIT PRODUK */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1100; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal-box { background: #fff; border-radius: 14px; width: 420px; max-width: 100%; max-height: 85vh; overflow-y: auto; padding: 26px; }
@@ -54,12 +57,13 @@
 </head>
 <body>
 
+  <!-- ================= LOGIN ================= -->
   <div class="login-wrap" id="login-wrap">
     <h1>Login Admin</h1>
     <p class="sub">Uji Jewelry Store</p>
     <form id="login-form">
-      <label for="login-user">Username</label>
-      <input type="text" id="login-user" required placeholder="Username">
+      <label for="login-user">Email</label>
+      <input type="email" id="login-user" required placeholder="Email akun admin">
 
       <label for="login-pass">Password</label>
       <input type="password" id="login-pass" required placeholder="Password">
@@ -69,7 +73,7 @@
     </form>
   </div>
 
-
+  <!-- ================= PANEL ADMIN ================= -->
   <div class="admin-wrap" id="admin-wrap">
     <div class="admin-header">
       <h1>Kelola Produk</h1>
@@ -98,6 +102,7 @@
     </div>
   </div>
 
+  <!-- ================= MODAL TAMBAH/EDIT ================= -->
   <div class="modal-overlay" id="product-modal">
     <div class="modal-box">
       <h2 id="modal-title">Tambah Produk</h2>
@@ -134,10 +139,45 @@
 
   <script src="products-data.js"></script>
   <script>
+    // ================== KONFIGURASI LOGIN ==================
+    // Login sekarang memakai akun yang sama dengan akun.html (localStorage "customers").
+    // Hanya akun dengan role "admin" yang bisa masuk ke panel ini.
 
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "admin123";
+    function getCustomers() {
+      return JSON.parse(localStorage.getItem("customers")) || [];
+    }
+    function saveCustomers(list) {
+      localStorage.setItem("customers", JSON.stringify(list));
+    }
+    function getCurrentCustomerEmail() {
+      return localStorage.getItem("currentCustomerEmail");
+    }
+    function getCurrentAdmin() {
+      const email = getCurrentCustomerEmail();
+      if (!email) return null;
+      const customer = getCustomers().find(c => c.email === email);
+      return customer && customer.role === "admin" ? customer : null;
+    }
 
+    // Seed satu akun admin default kalau belum ada akun admin sama sekali
+    function seedAdminAccount() {
+      const customers = getCustomers();
+      const sudahAdaAdmin = customers.some(c => c.role === "admin");
+      if (!sudahAdaAdmin) {
+        customers.push({
+          nama: "Admin Uji Jewelry",
+          email: "admin@ujijewelry.com",
+          telepon: "-",
+          alamat: "-",
+          password: "admin123",
+          role: "admin"
+        });
+        saveCustomers(customers);
+      }
+    }
+    seedAdminAccount();
+
+    // ================== FUNGSI PRODUK (sama seperti di script.js) ==================
     function getProducts() {
       let produk = JSON.parse(localStorage.getItem("products"));
       if (!produk) {
@@ -154,22 +194,33 @@
     function formatRupiah(angka) {
       return "Rp " + Number(angka).toLocaleString("id-ID");
     }
-    
+
+    // ================== LOGIN / LOGOUT ==================
     document.getElementById("login-form").addEventListener("submit", function (e) {
       e.preventDefault();
-      const user = document.getElementById("login-user").value;
+      const email = document.getElementById("login-user").value.toLowerCase().trim();
       const pass = document.getElementById("login-pass").value;
 
-      if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-        sessionStorage.setItem("isAdminLoggedIn", "true");
-        tampilkanPanelAdmin();
-      } else {
+      const customers = getCustomers();
+      const found = customers.find(c => c.email === email && c.password === pass);
+
+      if (!found) {
+        document.getElementById("login-error").innerText = "Email atau password salah.";
         document.getElementById("login-error").style.display = "block";
+        return;
       }
+      if (found.role !== "admin") {
+        document.getElementById("login-error").innerText = "Akun ini bukan akun admin.";
+        document.getElementById("login-error").style.display = "block";
+        return;
+      }
+
+      localStorage.setItem("currentCustomerEmail", email);
+      tampilkanPanelAdmin();
     });
 
     function logoutAdmin() {
-      sessionStorage.removeItem("isAdminLoggedIn");
+      localStorage.removeItem("currentCustomerEmail");
       document.getElementById("admin-wrap").style.display = "none";
       document.getElementById("login-wrap").style.display = "block";
       document.getElementById("login-form").reset();
@@ -181,6 +232,7 @@
       renderTabelProduk();
     }
 
+    // ================== RENDER TABEL PRODUK ==================
     function renderTabelProduk() {
       const produk = getProducts();
       const tbody = document.getElementById("admin-product-list");
@@ -225,6 +277,7 @@
       renderTabelProduk();
     }
 
+    // ================== TAMBAH / EDIT PRODUK ==================
     let editIndex = null;
 
     function bukaModalTambah() {
@@ -275,8 +328,9 @@
       renderTabelProduk();
     }
 
+    // ================== CEK STATUS LOGIN SAAT HALAMAN DIBUKA ==================
     document.addEventListener("DOMContentLoaded", function () {
-      if (sessionStorage.getItem("isAdminLoggedIn") === "true") {
+      if (getCurrentAdmin()) {
         tampilkanPanelAdmin();
       }
     });
