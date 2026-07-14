@@ -222,16 +222,20 @@ Untuk kebutuhan demo/akademik, checkout dapat disimulasikan menggunakan salah sa
 - Data historis stok (yang sudah dicatat lewat panel admin) dapat dianalisis untuk memprediksi kebutuhan restock musiman
 
 ---
+---
 
 ## Lampiran: Struktur File Proyek
 ```
-├── index.html      → Halaman utama toko (katalog, kategori, pencarian)
-├── cart.html        → Halaman keranjang & proses checkout
-├── admin.html        → Panel admin (login & manajemen stok)
-├── script.js       → Logika keranjang, stok, dan checkout
-└── README.md       → Dokumen Business Overview (dokumen ini)
+├── index.html → Halaman utama toko (katalog, kategori, pencarian)
+├── cart.html → Halaman keranjang & proses checkout
+├── admin.html → Panel admin (login & manajemen stok)
+├── script.js → Logika keranjang, stok, dan checkout
+├── style.css → File utama untuk pengaturan tampilan seluruh halaman
+├── chart.css → File tambahan untuk pengaturan tampilan chart/visualisasi data
+└── README.md → Dokumen Business Overview (dokumen ini)
 ```
 
+masukin buat style.css sama chart.css
 ---
 
 **Disusun oleh:** Puji — Administrasi Bisnis 3
