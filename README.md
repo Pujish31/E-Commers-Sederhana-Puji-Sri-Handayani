@@ -1,6 +1,6 @@
 # Uji Jewelry Store — Business Overview
 
-> Dokumen ini berisi gambaran bisnis lengkap untuk **Uji Jewelry Store**, mulai dari konsep bisnis, target pasar, strategi produk, model pendapatan, hingga rencana teknis (checkout, keamanan, SEO, dan data analytics) untuk mendukung platform e-commerce yang sudah dibangun (`index.html`, `cart.html`, `admin.html`, `script.js`).
+> Dokumen ini berisi gambaran bisnis lengkap untuk **Uji Jewelry Store**, mulai dari konsep bisnis, target pasar, strategi produk, model pendapatan, hingga rencana teknis (checkout, keamanan, SEO, dan data analytics) untuk mendukung platform e-commerce yang sudah dibangun (`index.html`, `cart.html`, `admin.html`, `style.css`, `chart.css`, `script.js`).
 
 ---
 
